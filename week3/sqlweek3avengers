@@ -1,0 +1,150 @@
+-- CREATE DATABASE avengers;
+
+-- USE avengers
+ 
+-- CREATE TABLE `avengers` (
+--   `url` varchar(100) DEFAULT NULL,
+--   `name` varchar(50) DEFAULT NULL,
+--   `appearances` varchar(5) DEFAULT NULL,
+--   `current` varchar(3) DEFAULT NULL,
+--   `gender` varchar(6) DEFAULT NULL,
+--   `probationaryIntro` varchar(25) DEFAULT NULL,
+--   `fullAvengersIntro` varchar(25) DEFAULT NULL,
+--   `year` int DEFAULT NULL,
+--   `yearsSinceJoining` int DEFAULT NULL,
+--   `honorary` varchar(25) DEFAULT NULL,
+--   `death1` varchar(5) DEFAULT NULL,
+--   `return1` varchar(5) DEFAULT NULL,
+--   `death2` varchar(5) DEFAULT NULL,
+--   `return2` varchar(5) DEFAULT NULL,
+--   `death3` varchar(5) DEFAULT NULL,
+--   `return3` varchar(5) DEFAULT NULL,
+--   `death4` varchar(5) DEFAULT NULL,
+--   `return4` varchar(5) DEFAULT NULL,
+--   `death5` varchar(5) DEFAULT NULL,
+--   `return5` varchar(5) DEFAULT NULL,
+--   `notes` varchar(250) DEFAULT NULL
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 1 Show all information on the Avengers.
+-- SELECT * FROM avengers
+
+-- 2 Create a new table with information from another super hero group [can be imported from elsewhere or fictitious]. Make sure there is an appropriate header and must be at least 30 rows. 
+-- CREATE TABLE `heroes` ( 
+-- `name` varchar(50) DEFAULT NULL )
+
+-- INSERT INTO heroes VALUES
+-- ('Jesse'), ('Superman'), ('Batman'), 
+-- ('Aquaman'), ('WonderWoman'), ('Flash'),
+-- ('Shazaam'), ('BeastBoy'), ('Cyborg'),
+-- ('Green Lantern'), ('Hawkman'), ('Martain Manhunter'),
+-- ('Robin'), ('Starfire'), ('Raven'),
+-- ('Supergirl'), ('Batgirl'), ('Nightwing'),
+-- ('Dean'), ('Adam'), ('Kevin'),
+-- ('Sam'), ('Holly'), ('Hazel'),
+-- ('Jesse'), ('Nate'), ('Mike'),
+-- ('Shiela'), ('Rosie'), ('Emilia');
+--  SELECT * FROM heroes
+ 
+ -- 3  Add a column to your new table (the new superheros) for those who are interested in joining the Avengers. Make this be randomly assigned.
+--  ALTER TABLE heroes ADD COLUMN interested INT not null 
+--  AFTER name;
+ 
+--  SELECT * FROM heroes; 
+--  UPDATE heroes SET interested = CASE 
+--  WHEN rand() > 0.5 THEN 1 ELSE 0 END; 
+
+-- 4 Add a column to your new table (the new superheros) for their favorite Avenger (have it randomly choose between Anthony Edward "Tony" Stark, Robert Bruce Banner, & Victor Shade).
+--  ALTER TABLE heroes 
+--  ADD COLUMN favorite varchar(75) NOT NULL AFTER interested;
+--  UPDATE heroes SET favorite = CASE
+--  WHEN rand() < 0.3 THEN 'Anthony Edward "Tony" Stark'
+--  WHEN rand() < 0.6 THEN 'Robert Bruce Banner'
+--  ELSE "Victor Shade" END;
+--  
+--  SELECT * FROM heroes
+ 
+-- 5. Create an association between the two tables for who is interested in joining the Avengers.
+-- SELECT heroes.name  heroes, avengers.name as avengers
+-- FROM heroes 
+-- JOIN avengers
+-- ON avengers.name = heroes.favorite;
+
+-- -- 6. Show your association and create a new table for that association.
+-- CREATE TABLE recruits as select heroes.name, avengers.name as avengers
+-- from heroes
+-- join avengers
+-- on avengers.name = heroes.favorite;
+-- select * from recruits;
+
+-- -- 7. List all Avengers who have more than 1000 appearances in alphabetic order.
+-- SELECT name, appearances FROM avengers
+-- WHERE appearances > 1000
+-- ORDER BY NAME;
+
+-- -- 8. What Avengers do not have more than 1000 appearances?
+-- SELECT name, appearances FROM avengers
+-- WHERE appearances < 1000 ORDER BY NAME;
+
+-- -- 9. Not more than 500?
+--  select name, appearances from avengers 
+--  where appearances <= 500 ORDER BY NAME;
+--  
+--  -- 10. Not more than 50?
+--  SELECT name, appearances FROM avengers
+--  WHERE appearances <= 50 ORDER BY NAME;
+--  
+--  -- 11. Not more than 50 and female?
+--  SELECT name, appearances FROM avengers 
+--  WHERE appearances <= 50 and gender = 'female' ORDER BY NAME DESC;
+--  
+--  -- 12. More than 150, male, and are full members?
+--  SELECT name, appearances FROM avengers 
+--  WHERE appearances <= 150 and gender = 'male' ORDER BY NAME;
+--  
+--  -- 13. Write a function that can add a new superhero to the Avengers if they are interested in becoming an Avenger and if their favorite Avenger is Victor Shade.
+-- USE avengers;
+-- DELIMITER //
+-- CREATE function addHero()
+--     returns text     
+--     deterministic
+--     begin
+--         INSERT INTO avengers (name) select name from heroes
+--         WHERE interested = 1 AND favorite = "Victor Shade";
+--         return 'added';
+--     END;
+-- DELIMITER;
+
+-- SELECT avengers.addHero()
+
+-- SELECT * FROM avengers;
+--  -- 14. Write a function that counts the total amount of records(rows/entries) in a given table.
+-- DELIMITER //
+-- CREATE function totalRows()
+--     returns int
+--     reads sql data
+--     deterministic
+--     begin
+--         RETURN (SELECT COUNT(*) from avengers);
+--     end;
+-- DELIMITER;
+
+--  -- 15. Call your totalRecords function on the avengers table. What is the output?
+-- SELECT avengers.totalRows() as Total_Rows
+                -- OUTPUT is 171
+
+-- 16. There is room for 3 new Avengers so invoke your newMember function 3 times to add 3 new members to the Avengers.
+-- SELECT avengers.addHero()
+
+-- 17. Show that the addition of new members was successful.
+-- SELECT * FROM avengers;
+ 
+-- 18. Remove any tables that are not the original avengers table and prove that they have been removed.
+--  DROP TABLE heroes;
+--  DROP TABLE recruits;
+--  DROP FUNCTION addHeros;
+--  DROP FUNCTION totalrows;
+ 
+ 
+
+ 
